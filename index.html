@@ -538,8 +538,16 @@
                         <input type="number" id="prodPrice" class="admin-input" placeholder="مثال: 450">
                     </div>
                     <div class="admin-form-group">
-                        <label>صورة المنتج (رابط صورة أو اسم ملف)</label>
-                        <input type="text" id="prodImg" class="admin-input" placeholder="image_9d3345.jpg أو رابط">
+                       <div style="margin-bottom: 15px; text-align: right;">
+    <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #5a4f3f;">صورة المنتج</label>
+    
+    <input type="file" id="productImageInput" accept="image/*" style="display: none;">
+    
+    <div id="uploadTrigger" onclick="document.getElementById('productImageInput').click()" style="border: 2px dashed #b38f4f; padding: 15px; text-align: center; border-radius: 8px; cursor: pointer; background: rgba(179,143,79,0.05); transition: all 0.3s;">
+        <i class="fas fa-cloud-upload-alt" style="font-size: 1.8rem; color: #b38f4f; margin-bottom: 8px;"></i>
+        <p id="uploadPlaceholder" style="margin: 0; font-size: 0.9rem; color: #5a4f3f; font-weight: 600;">اضغط هنا لاختيار صورة من المعرض</p>
+    </div>
+</div>
                     </div>
 
                     <button class="admin-btn" onclick="addNewProduct()">إضافة منتج جديد</button>
@@ -571,6 +579,23 @@
     </div>
 
     <script>
+        let uploadedImageBase64 = "";
+
+document.getElementById('productImageInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            uploadedImageBase64 = event.target.result; // كود الصورة هنا جاهز
+            
+            // تغيير شكل الزرار لشكل "تم الرفع"
+            document.getElementById('uploadPlaceholder').innerText = "تم اختيار الصورة: " + file.name;
+            document.getElementById('uploadTrigger').style.background = "rgba(46, 174, 96, 0.1)";
+            document.getElementById('uploadTrigger').style.borderColor = "#2eae60";
+        };
+        reader.readAsDataURL(file);
+    }
+});
         // مصفوفة المنتجات (تُحمل من الـ LocalStorage أو تبدأ فارغة)
         let products = JSON.parse(localStorage.getItem('siwar_products')) || [];
 
