@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر سوار | SIWAR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-gold: #b38f4f;
+            --dark-gold: #8c6d33;
+            --bg-cream: #f9f6f0;
+            --text-dark: #2c2519;
+            --card-bg: rgba(255, 255, 255, 0.88);
+            --green-available: #27ae60;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'El Messiri', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* حاوية الموبايل لتبدو كالأبليكيشن */
+        .phone-container {
+            width: 100%;
+            max-width: 430px;
+            height: 92vh;
+            background: url('image_9d3345.jpg') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 4px solid #fff;
+        }
+
+        /* طبقة حماية شفافة فوق الخلفية لزيادة وضوح الكلام */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(249, 246, 240, 0.25);
+            z-index: 1;
+        }
+
+        /* المحتوى الأساسي فوق الأوفرلاي */
+        .content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 65px); /* خصم مساحة شريط التنقل السفلي */
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        /* الهيدر العلوي */
+        .header {
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            letter-spacing: 1px;
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        .secret-star {
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .secret-star:active {
+            transform: scale(1.4);
+        }
+
+        /* التحكم في عرض واختفاء الصفحات */
+        .page {
+            display: none;
+            width: 100%;
+            height: 100%;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+
+        .page.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.75);
+            padding: 6px 20px;
+            border-radius: 12px;
+            align-self: center;
+            border: 1px solid rgba(179, 143, 79, 0.2);
+        }
+
+        /* === 1. ستايل الصفحة الرئيسية === */
+        .about-page-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: flex-end;
+            padding-bottom: 20px;
+        }
+
+        .about-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(179, 143, 79, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .about-card h2 {
+            color: var(--dark-gold);
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .about-card p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #3d3324;
+            font-weight: 600;
+        }
+
+        /* === 2. ستايل صفحة المنتجات === */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding-bottom: 20px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(179, 143, 79, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .product-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .product-price {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dark-gold);
+            margin-bottom: 4px;
+        }
+
+        .product-status {
+            font-size: 0.75rem;
+            color: var(--green-available);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .btn-order {
+            background: var(--primary-gold);
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .no-products {
+            grid-column: 1 / -1;
+            text-align: center;
+            background: var(--card-bg);
+            padding: 30px 20px;
+            border-radius: 15px;
+            border: 1px dashed var(--primary-gold);
+            font-weight: 600;
+            color: #7a6b53;
+            margin-top: 40px;
+        }
+
+        /* === 3. ستايل صفحة تواصل معنا === */
+        .contact-links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid rgba(179, 143, 79, 0.25);
+            border-radius: 50px;
+            padding: 12px 18px;
+            text-decoration: none;
+            color: var(--text-dark);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .contact-icon-wrapper {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 1.3rem;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+
+        .contact-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .contact-label {
+            font-size: 0.85rem;
+            color: #7a6b53;
+            font-weight: 600;
+        }
+
+        .contact-handle {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-top: -2px;
+        }
+
+        /* === 4. ستايل لوحة التحكم (Admin Panel) === */
+        .admin-box {
+            background: var(--card-bg);
+            border: 1px solid rgba(179, 143, 79, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .admin-lock-icon {
+            font-size: 2.5rem;
+            color: var(--primary-gold);
+            margin-bottom: 10px;
+        }
+
+        .admin-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid rgba(179, 143, 79, 0.4);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            text-align: center;
+            outline: none;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .admin-input:focus {
+            border-color: var(--dark-gold);
+        }
+
+        .admin-btn {
+            width: 100%;
+            background: var(--primary-gold);
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .admin-form-group {
+            text-align: right;
+            margin-bottom: 12px;
+        }
+
+        .admin-form-group label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* تنسيق قائمة المنتجات الحالية مع زر الحذف الفخم */
+        .admin-products-list {
+            text-align: right;
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .admin-product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(179, 143, 79, 0.15);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .admin-prod-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-prod-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .admin-prod-price {
+            font-size: 0.85rem;
+            color: var(--dark-gold);
+            font-weight: 600;
+        }
+
+        .btn-delete {
+            background: #ffeaea;
+            color: #e74c3c;
+            border: 1px solid #ffcccc;
+            padding: 6px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-delete:active {
+            background: #e74c3c;
+            color: white;
+        }
+
+        /* شريط التنقل السفلي الرايق (3 أزرار فقط) */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 65px;
+            background: rgba(255, 255, 255, 0.95);
+            border-top: 1px solid rgba(179, 143, 79, 0.2);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 3;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #8c8c8c;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: color 0.3s;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 33.33%;
+        }
+
+        .nav-item.active {
+            color: var(--primary-gold);
+        }
+
+        .nav-item i {
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-container">
+        <div class="overlay"></div>
+        
+        <div class="content">
+            <div class="header">
+                Welcome.....<span class="secret-star" onclick="triggerSecretStar()">✨</span>
+            </div>
+
+            <div id="aboutPage" class="page active">
+                <div class="about-page-container">
+                    <div class="about-card">
+                        <h2>حول متجر سوار</h2>
+                        <p>لأن الأناقة ليست مجرد اختيار، بل أسلوب حياة…<br>في سِوار قطع تجمع بين البساطة والفخامة، لتكون رفيقتكِ في كل مناسبة وتُكمل حضوركِ بأناقة لا تُنسى ✨</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="productsPage" class="page">
+                <h2 class="page-title">المنتجات</h2>
+                <div class="products-grid" id="productsGrid">
+                    </div>
+            </div>
+
+            <div id="contactPage" class="page">
+                <h2 class="page-title">تواصل معنا</h2>
+                <div class="contact-links-container">
+                    <a href="https://www.facebook.com/share/1F2VZP6ARr/" target="_blank" class="contact-btn">
+                        <div class="contact-icon-wrapper"><i class="fab fa-facebook-f"></i></div>
+                        <div class="contact-text-wrapper">
+                            <span class="contact-label">فيسبوك |</span>
+                            <span class="contact-handle">@Siwar.By.Sara</span>
+                        </div>
+                    </a>
+
+                    <a href="https://www.instagram.com/sarsora.225?utm_source=qr&igsh=N2x0a3phZmZ1Mmpm" target="_blank" class="contact-btn">
+                        <div class="contact-icon-wrapper"><i class="fab fa-instagram"></i></div>
+                        <div class="contact-text-wrapper">
+                            <span class="contact-label">انستقرام |</span>
+                            <span class="contact-handle">@Siwar.By.Sara</span>
+                        </div>
+                    </a>
+
+                    <a href="https://wa.me/201038098988" target="_blank" class="contact-btn">
+                        <div class="contact-icon-wrapper"><i class="fab fa-whatsapp"></i></div>
+                        <div class="contact-text-wrapper">
+                            <span class="contact-label">واتساب |</span>
+                            <span class="contact-handle">01038098988</span>
+                        </div>
+                    </a>
+                </div>
+                <div style="text-align: center; margin-top: 20px; padding: 10px 0; border-top: 1px dashed rgba(179, 143, 79, 0.25);">
+    <a href="https://wa.me/201024842647" target="_blank" style="font-size: 0.9rem; color: #5a4f3f; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+        <span>تصميم وتطوير</span>
+        <span style="color: #b38f4f; font-weight: 700; background: rgba(179, 143, 79, 0.1); padding: 2px 8px; border-radius: 6px;">
+            EL.MO <i class="fas fa-code"></i>
+        </span>
+    </a>
+</div>
+            </div>
+
+            <div id="adminPage" class="page">
+                <h2 class="page-title">لوحة التحكم السريّة</h2>
+                
+                <div id="adminLoginBox" class="admin-box">
+                    <div class="admin-lock-icon"><i class="fas fa-lock"></i></div>
+                    <h3 style="margin-bottom: 15px;">خاص بالمنشئ</h3>
+                    <input type="password" id="adminPasswordInput" class="admin-input" placeholder="••••••••">
+                    <button class="admin-btn" onclick="checkAdminPassword()">دخول</button>
+                </div>
+
+                <div id="adminControlBox" class="admin-box" style="display: none;">
+                    <h3 style="color: var(--dark-gold); margin-bottom: 15px;">إضافة منتج جديد</h3>
+                    
+                    <div class="admin-form-group">
+                        <label>اسم المنتج</label>
+                        <input type="text" id="prodName" class="admin-input" placeholder="مثال: قلادة النجمة">
+                    </div>
+                    <div class="admin-form-group">
+                        <label>السعر (جنيه)</label>
+                        <input type="number" id="prodPrice" class="admin-input" placeholder="مثال: 450">
+                    </div>
+                    <div class="admin-form-group">
+                        <label>صورة المنتج (رابط صورة أو اسم ملف)</label>
+                        <input type="text" id="prodImg" class="admin-input" placeholder="image_9d3345.jpg أو رابط">
+                    </div>
+
+                    <button class="admin-btn" onclick="addNewProduct()">إضافة منتج جديد</button>
+
+                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid rgba(179,143,79,0.2);">
+                    
+                    <h3 style="color: var(--dark-gold); margin-bottom: 10px;">المنتجات الحالية</h3>
+                    <div class="admin-products-list" id="adminProductsList">
+                        </div>
+                </div>
+            </div>
+
+        </div>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="switchPage('aboutPage', this)">
+                <i class="fas fa-home"></i>
+                <span>الرئيسية</span>
+            </button>
+            <button class="nav-item" onclick="switchPage('productsPage', this)">
+                <i class="fas fa-shopping-bag"></i>
+                <span>المنتجات</span>
+            </button>
+            <button class="nav-item" onclick="switchPage('contactPage', this)">
+                <i class="fas fa-phone-alt"></i>
+                <span>تواصل معنا</span>
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        // مصفوفة المنتجات (تُحمل من الـ LocalStorage أو تبدأ فارغة)
+        let products = JSON.parse(localStorage.getItem('siwar_products')) || [];
+
+        // عند تحميل الصفحة نقوم بعرض المنتجات فوراً
+        document.addEventListener("DOMContentLoaded", () => {
+            renderProducts();
+        });
+
+        // دالة التنقل بين الصفحات
+        function switchPage(pageId, element) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            
+            if(element) {
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                element.classList.add('active');
+            } else {
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            }
+            
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // دالة التحقق من كلمة مرور لوحة التحكم
+        function checkAdminPassword() {
+            const pass = document.getElementById('adminPasswordInput').value;
+            if (pass === "Sarasero ❤️ 9/1") {
+                document.getElementById('adminLoginBox').style.display = 'none';
+                document.getElementById('adminControlBox').style.display = 'block';
+                renderAdminProductsList();
+            } else {
+                alert("كلمة السر خاطئة! حاول مجدداً.");
+            }
+        }
+
+        // دالة إضافة منتج جديد
+        function addNewProduct() {
+            const name = document.getElementById('prodName').value.trim();
+            const price = document.getElementById('prodPrice').value.trim();
+            let img = document.getElementById('prodImg').value.trim();
+
+            if (!name || !price) {
+                alert("برجاء ملء اسم المنتج والسعر!");
+                return;
+            }
+
+            if (!img) {
+                img = 'image_9d3345.jpg';
+            }
+
+            const newProduct = {
+                id: Date.now(),
+                name: name,
+                price: price,
+                img: img
+            };
+
+            products.push(newProduct);
+            localStorage.setItem('siwar_products', JSON.stringify(products));
+
+            document.getElementById('prodName').value = '';
+            document.getElementById('prodPrice').value = '';
+            document.getElementById('prodImg').value = '';
+
+            alert("تم إضافة المنتج بنجاح!");
+            renderProducts();
+            renderAdminProductsList();
+        }
+
+        // دالة حذف منتج نهائياً
+        function deleteProduct(id) {
+            if (confirm("هل أنت متأكد من حذف هذا المنتج؟")) {
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('siwar_products', JSON.stringify(products));
+                renderProducts();
+                renderAdminProductsList();
+            }
+        }
+
+        // دالة عرض المنتجات في صفحة العميل
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+
+            if (products.length === 0) {
+                grid.innerHTML = '<div class="no-products">لا توجد منتجات حالياً، انتظروا تشكيلتنا الفخمة قريباً!</div>';
+                return;
+            }
+
+            products.forEach(p => {
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <img src="${p.img}" alt="${p.name}" class="product-img" onerror="this.src='image_9d3345.jpg'">
+                        <div class="product-info">
+                            <h3 class="product-title">${p.name}</h3>
+                            <p class="product-price">${p.price} جنيه</p>
+                            <p class="product-status">متوفر - اطلب الآن</p>
+                            <button class="btn-order" onclick="orderProduct('${p.name}')">اطلب</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // دالة عرض قائمة المنتجات الحالية داخل لوحة التحكم لسهولة الحذف الفوري
+        function renderAdminProductsList() {
+            const list = document.getElementById('adminProductsList');
+            list.innerHTML = '';
+
+            if (products.length === 0) {
+                list.innerHTML = '<p style="text-align:center; font-size:0.9rem; color:#888; width:100%;">لا توجد منتجات مضافة حالياً.</p>';
+                return;
+            }
+
+            products.forEach(p => {
+                list.innerHTML += `
+                    <div class="admin-product-item">
+                        <div class="admin-prod-details">
+                            <span class="admin-prod-name">${p.name}</span>
+                            <span class="admin-prod-price">${p.price} جنيه</span>
+                        </div>
+                        <button class="btn-delete" onclick="deleteProduct(${p.id})">
+                            <i class="fas fa-trash-alt"></i> حذف
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        // دالة الطلب الفوري عبر الواتساب
+        function orderProduct(productName) {
+            const phoneNumber = "201038098988";
+            const message = encodeURIComponent(`مرحباً متجر سوار، أريد طلب منتج: ${productName}`);
+            window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+        }
+
+        // الحيلة السحرية: الضغط 5 مرات على ✨ في الهيدر يفتح صفحة الـ Admin السرية
+        let clickCount = 0;
+        function triggerSecretStar() {
+            clickCount++;
+            if (clickCount === 5) {
+                clickCount = 0;
+                switchPage('adminPage', null);
+            }
+        }
+    </script>
+</body>
+</html>
