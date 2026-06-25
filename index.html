@@ -27,30 +27,36 @@
             font-family: 'El Messiri', sans-serif;
         }
 
-        body {
-            background-color: var(--bg-cream);
-            color: var(--text-dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+      body {
+    background-color: var(--bg-cream);
+    color: var(--text-dark);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px 0;
+}
 
         /* حاوية الموبايل لتبدو كالأبليكيشن */
-        .phone-container {
-            width: 100%;
-            max-width: 430px;
-            height: 92vh;
-            background: url('image_9d3345.jpg') no-repeat center center;
-            background-size: cover;
-            position: relative;
-            border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            border: 4px solid #fff;
-        }
+       .phone-container {
+    width: 100%;
+    max-width: 430px;
+    height: 92vh;
+    background: url('image_9d3345.jpg') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    border-radius: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 4px solid #fff;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
 
         /* طبقة حماية شفافة فوق الخلفية لزيادة وضوح الكلام */
         .overlay {
@@ -64,17 +70,16 @@
         }
 
         /* المحتوى الأساسي فوق الأوفرلاي */
-        .content {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            height: calc(100% - 65px); /* خصم مساحة شريط التنقل السفلي */
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .content::-webkit-scrollbar {
+      .content  {
+    position: relative;
+    z-index: 1; /* قللنا الـ z-index عشان ميعملش تضارب */
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 65px); 
+    padding: 20px;
+    /* تأكد إن مفيش هنا overflow: hidden */
+}
+       .content::-webkit-scrollbar {
             width: 0px;
         }
 
@@ -92,20 +97,20 @@
         }
 
         .secret-star {
-            cursor: pointer;
+            cursor: default;
             display: inline-block;
             transition: transform 0.2s;
         }
 
-        .secret-star:active {
+      /*  .secret-star:active {
             transform: scale(1.4);
-        }
+    */
 
         /* التحكم في عرض واختفاء الصفحات */
-        .page {
+       .page  {
             display: none;
             width: 100%;
-            height: 100%;
+           height: 100%;
             animation: fadeIn 0.4s ease-in-out forwards;
         }
 
@@ -161,13 +166,54 @@
         }
 
         /* === 2. ستايل صفحة المنتجات === */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            padding-bottom: 20px;
-        }
+        /* ستايل قائمة التصنيفات */
+.categories-nav {
+    flex-shrink: 0; /* يمنع الأزرار من الانكماش */
+    display: flex;
+    gap: 8px;
+    padding: 0 5px 15px 5px;
+    overflow-x: auto;
+    margin-bottom: 10px;
+    scrollbar-width: none;
+}
 
+.categories-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.cat-btn {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--primary-gold);
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark-gold);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s;
+}
+
+.cat-btn.active {
+    background: var(--primary-gold);
+    color: white;
+}
+ .products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding-bottom: 120px; /* مساحة كبيرة عشان تضمن الوصول للآخر */
+    
+    /* الخصائص الحاسمة */
+    overflow-y: auto !important; 
+    flex: 1; 
+    pointer-events: auto !important; /* دي بتجبر الماوس إنه يتفاعل مع المنطقة */
+    z-index: 10; /* خليناها أعلى من أي حاجة تانية */
+    position: relative;
+}
+.products-grid::-webkit-scrollbar {
+    display: none;
+}
         .product-card {
             background: var(--card-bg);
             border: 1px solid rgba(179, 143, 79, 0.2);
@@ -304,6 +350,7 @@
             text-align: center;
             box-shadow: 0 10px 25px rgba(0,0,0,0.08);
             margin-bottom: 20px;
+              max-height: 85vh;
         }
 
         .admin-lock-icon {
@@ -357,7 +404,7 @@
         .admin-products-list {
             text-align: right;
             margin-top: 15px;
-            max-height: 200px;
+            max-height: 400px;
             overflow-y: auto;
         }
 
@@ -437,7 +484,7 @@
             cursor: pointer;
             background: none;
             border: none;
-            width: 33.33%;
+            width: 25%;
         }
 
         .nav-item.active {
@@ -453,6 +500,80 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        /* --- إضافات متجر سوار الجديدة --- */
+
+/* تنسيق السلة (Cart Modal) */
+#cartModal{
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(255,255,255,.96);
+    z-index: 999;
+
+    display: none;
+    overflow-y: auto;
+
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#cartItemsList {
+    margin: 20px 0;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+/* تنسيق أزرار التنقل */
+.categories-nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.cat-btn {
+    padding: 8px 15px;
+    border: 1px solid #b38f4f;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.cat-btn.active {
+    background: #b38f4f;
+    color: white;
+}
+/* هذا السطر يضمن ظهور لوحة التحكم فوق أي عنصر آخر */
+#adminPage.active {
+    z-index: 100 !important;
+    position: relative;
+}
+
+#adminLoginBox {
+    margin-top: 50px; /* مسافة بسيطة عشان ميبقاش لازق فوق */
+}
+#adminPage {
+    overflow-y: auto;
+    height: 100%;
+    padding-bottom: 120px;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#adminPage::-webkit-scrollbar {
+    display: none;
+}
+ #adminControlBox{
+    width: calc(100% - 20px);
+    margin: 10px;
+}
+#cartModal .admin-btn{
+    margin-bottom: 12px;
+}
     </style>
 </head>
 <body>
@@ -473,12 +594,37 @@
                     </div>
                 </div>
             </div>
+            
+<div id="productsPage" class="page">
+    <h2 class="page-title">المنتجات</h2>
 
-            <div id="productsPage" class="page">
-                <h2 class="page-title">المنتجات</h2>
-                <div class="products-grid" id="productsGrid"></div>
-            </div>
+    <div class="categories-nav">
+        <button class="cat-btn active" onclick="filterProducts('الكل', this)">الكل</button>
+        <button class="cat-btn" onclick="filterProducts('خواتم', this)">خواتم</button>
+        <button class="cat-btn" onclick="filterProducts('سلاسل', this)">سلاسل</button>
+        <button class="cat-btn" onclick="filterProducts('حلقان', this)">حلقان</button>
+        <button class="cat-btn" onclick="filterProducts('أساور', this)">أساور</button>
+    </div>
 
+    <div class="products-grid" id="productsGrid"></div>
+</div>
+
+<div id="cartModal">
+    <h2 class="page-title">سلة المشتريات</h2>
+
+    <div id="cartItemsList"></div>
+
+    <div id="cartTotal" style="font-weight:bold;margin:15px 0;"></div>
+
+    <button onclick="closeCart()" class="admin-btn">
+        إغلاق
+    </button>
+
+    <button onclick="checkout()" class="admin-btn">
+        إتمام الطلب
+    </button>
+</div>
+   
             <div id="contactPage" class="page">
                 <h2 class="page-title">تواصل معنا</h2>
                 <div class="contact-links-container">
@@ -498,11 +644,11 @@
                         </div>
                     </a>
 
-                    <a href="https://wa.me/201038098988" target="_blank" class="contact-btn">
+                    <a href="https://wa.me/201207686149" target="_blank" class="contact-btn">
                         <div class="contact-icon-wrapper"><i class="fab fa-whatsapp"></i></div>
                         <div class="contact-text-wrapper">
                             <span class="contact-label">واتساب |</span>
-                            <span class="contact-handle">01038098988</span>
+                            <span class="contact-handle">01207686149</span>
                         </div>
                     </a>
                 </div>
@@ -519,12 +665,13 @@
             <div id="adminPage" class="page">
                 <h2 class="page-title">لوحة التحكم السريّة</h2>
                 
-                <div id="adminLoginBox" class="admin-box">
-                    <div class="admin-lock-icon"><i class="fas fa-lock"></i></div>
-                    <h3 style="margin-bottom: 15px;">خاص بالمنشئ</h3>
-                    <input type="password" id="adminPasswordInput" class="admin-input" placeholder="••••••••">
-                    <button class="admin-btn" onclick="checkAdminPassword()">دخول</button>
-                </div>
+                <div id="adminLoginBox" class="admin-box" style="display: none;">
+    <div class="admin-lock-icon"><i class="fas fa-lock"></i></div>
+    <h3 style="margin-bottom: 15px;">خاص بالمنشئ</h3>
+    <input type="password" id="adminPasswordInput" class="admin-input" placeholder="••••••••">
+    
+    <button class="admin-btn" onclick="checkAdmin()">دخول</button>
+</div>
 
                 <div id="adminControlBox" class="admin-box" style="display: none;">
                     <h3 style="color: var(--dark-gold); margin-bottom: 15px;">إضافة منتج جديد</h3>
@@ -537,6 +684,15 @@
                         <label>السعر (جنيه)</label>
                         <input type="number" id="prodPrice" class="admin-input" placeholder="مثال: 450">
                     </div>
+                    <div class="admin-form-group">
+                        <label>تصنيف المنتج</label>
+                        <select id="prodCategory" class="admin-input">
+                            <option value="خواتم">خواتم</option>
+                            <option value="سلاسل">سلاسل</option>
+                            <option value="حلقان">حلقان</option>
+                            <option value="أساور">أساور</option>
+                        </select>
+                                       </div>
                     <div class="admin-form-group">
                         <div style="margin-bottom: 15px; text-align: right;">
                             <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #5a4f3f;">صورة المنتج</label>
@@ -570,16 +726,65 @@
                 <i class="fas fa-shopping-bag"></i>
                 <span>المنتجات</span>
             </button>
+            <button class="nav-item" onclick="showCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span>السلة</span>
+            </button>
             <button class="nav-item" onclick="switchPage('contactPage', this)">
                 <i class="fas fa-phone-alt"></i>
                 <span>تواصل معنا</span>
             </button>
         </nav>
     </div>
+           <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyBd3OWPnrfRAejqTW659_GZGJS5_m-63PE",
+    authDomain: "siwar-store.firebaseapp.com",
+    databaseURL: "https://siwar-store-default-rtdb.firebaseio.com",
+    projectId: "siwar-store",
+    storageBucket: "siwar-store.firebasestorage.app",
+    messagingSenderId: "835391571341",
+    appId: "1:835391571341:web:054856981f3f63bd1029c4"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  window.db = getDatabase(app);
+  window.ref = ref;
+  window.push = push;
+  window.set = set;
+  window.onValue = onValue;
+  window.remove = remove;
+</script> 
+<script>
+    // ننتظر تحميل الصفحة بالكامل
+    window.addEventListener('DOMContentLoaded', () => {
+        // كود جلب البيانات وعرضها (هذا الجزء هو الوحيد الذي تحتاجه)
+        window.onValue(window.ref(window.db, 'products'), (snapshot) => {
+            const data = snapshot.val();
+            
+            if (data) {
+                // تحديث المصفوفة العالمية
+                products = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                
+                // استدعاء دوال العرض
+                renderProducts(products);
+                renderAdminProductsList();
+                
+                console.log("المنتجات التي وصلت:", products);
+            } else {
+                console.log("الداتابيز فاضية!");
+            }
+        });
+    });
+</script>
+       <!-- JS -->
     <script>
+        // تعريف المتغيرات الأساسية للمتجر
+let currentCategory = 'الكل'; // أضف هذا السطر تحديداً
         let uploadedImageBase64 = "";
-
         // مستمع الحدث لتغيير الصورة وتحويلها لـ Base64
         document.getElementById('productImageInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -597,7 +802,7 @@
             }
         });
 
-        let products = JSON.parse(localStorage.getItem('siwar_products')) || [];
+let products = [];
 
         document.addEventListener("DOMContentLoaded", () => {
             renderProducts();
@@ -616,89 +821,173 @@
             document.getElementById(pageId).classList.add('active');
         }
 
-        function checkAdminPassword() {
-            const pass = document.getElementById('adminPasswordInput').value;
-            if (pass === "Sarasero ❤️ 9/1") {
-                document.getElementById('adminLoginBox').style.display = 'none';
-                document.getElementById('adminControlBox').style.display = 'block';
-                renderAdminProductsList();
-            } else {
-                alert("كلمة السر خاطئة! حاول مجدداً.");
-            }
-        }
+        
+const SALT = "My_Salt_Key_2026_ @$%^& _"; 
 
-        function addNewProduct() {
-            const name = document.getElementById('prodName').value.trim();
-            const price = document.getElementById('prodPrice').value.trim();
+// دالة تحويل النص إلى Hash مشفر
+async function sha256(message) {
+    const saltedMessage = message + SALT; 
+    const msgBuffer = new TextEncoder().encode(saltedMessage);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
-            if (!name || !price) {
-                alert("برجاء ملء اسم المنتج والسعر!");
-                return;
-            }
+       function addNewProduct() {
+    const name = document.getElementById('prodName').value.trim();
+    const price = document.getElementById('prodPrice').value.trim();
+    const category = document.getElementById('prodCategory').value;
 
-            let img = uploadedImageBase64;
-            if (!img) {
-                img = 'image_9d3345.jpg';
-            }
+    if (!name || !price) {
+        alert("برجاء ملء اسم المنتج والسعر!");
+        return;
+    }
 
-            const newProduct = {
-                id: Date.now(),
-                name: name,
-                price: price,
-                img: img
-            };
-
-            products.push(newProduct);
-            localStorage.setItem('siwar_products', JSON.stringify(products));
-
-            document.getElementById('prodName').value = '';
-            document.getElementById('prodPrice').value = '';
-            document.getElementById('productImageInput').value = '';
-            uploadedImageBase64 = ""; 
-
-            document.getElementById('uploadPlaceholder').innerText = "اضغط هنا لاختيار صورة من المعرض";
-            document.getElementById('uploadTrigger').style.background = "rgba(179,143,79,0.05)";
-            document.getElementById('uploadTrigger').style.borderColor = "#b38f4f";
-            document.getElementById('uploadTrigger').querySelector('i').style.color = "#b38f4f";
-
-            alert("تم إضافة المنتج بنجاح!");
-            renderProducts();
-            renderAdminProductsList();
-        }
-
-        function deleteProduct(id) {
-            if (confirm("هل أنت متأكد من حذف هذا المنتج؟")) {
-                products = products.filter(p => p.id !== id);
-                localStorage.setItem('siwar_products', JSON.stringify(products));
-                renderProducts();
-                renderAdminProductsList();
-            }
-        }
-
-        function renderProducts() {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = '';
-
-            if (products.length === 0) {
-                grid.innerHTML = '<div class="no-products">لا توجد منتجات حالياً، انتظروا تشكيلتنا الفخمة قريباً!</div>';
-                return;
-            }
-
-            products.forEach(p => {
-                grid.innerHTML += `
-                    <div class="product-card">
-                        <img src="${p.img}" alt="${p.name}" class="product-img" onerror="this.src='image_9d3345.jpg'">
-                        <div class="product-info">
-                            <h3 class="product-title">${p.name}</h3>
-                            <p class="product-price">${p.price} جنيه</p>
-                            <p class="product-status">متوفر - اطلب الآن</p>
-                            <button class="btn-order" onclick="orderProduct('${p.name}')">اطلب</button>
-                        </div>
-                    </div>
-                `;
+    // هنا الكود الجديد: إرسال البيانات إلى Firebase
+    // هنستخدم 'products' كاسم للمجلد في الداتابيز
+    const newProductRef = window.push(window.ref(window.db, 'products'));
+    
+    window.set(newProductRef, {
+        name: name,
+        price: price,
+        category: category,
+        img: uploadedImageBase64 || 'default_image_url.jpg', // هنا بيتحفظ رابط الصورة
+        timestamp: Date.now() // عشان نعرف أحدث منتج
+    }).then(() => {
+        alert("تم إضافة المنتج للمتجر بنجاح على Firebase!");
+        // مسح الحقول بعد الإضافة
+        document.getElementById('prodName').value = "";
+        document.getElementById('prodPrice').value = "";
+    }).catch((error) => {
+        alert("حدث خطأ أثناء الإضافة: " + error.message);
+    });
+}
+       function deleteProduct(id) {
+    if (confirm("هل أنت متأكد من حذف هذا المنتج؟")) {
+        // حذف المنتج من الفايربيز باستخدام الـ id النصي
+        window.remove(window.ref(window.db, 'products/' + id))
+            .then(() => {
+                console.log("تم الحذف بنجاح!");
+            })
+            .catch((error) => {
+                console.error("خطأ أثناء الحذف:", error);
             });
-        }
+    }
+}
+        let cart = [];
 
+// إضافة منتج للسلة
+function addToCart(productName, productPrice) {
+    cart.push({ name: productName, price: productPrice });
+    alert("تم إضافة " + productName + " للسلة!");
+}
+
+// فتح السلة
+// فتح السلة وعرض المحتويات
+function showCart() {
+    const cartList = document.getElementById('cartItemsList');
+    const cartTotal = document.getElementById('cartTotal');
+    cartList.innerHTML = '';
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        cartList.innerHTML += `
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span>${item.name} - ${item.price} جنيه</span>
+                <button onclick="removeFromCart(${index})" style="background: red; color: white; border: none; padding: 2px 8px; cursor: pointer;">حذف</button>
+            </div>
+        `;
+        total += parseInt(item.price);
+    });
+
+    cartTotal.innerText = "الإجمالي: " + total + " جنيه";
+    document.getElementById('cartModal').style.display = 'block';
+}
+
+// دالة حذف منتج من السلة
+function removeFromCart(index) {
+    cart.splice(index, 1); // حذف العنصر من المصفوفة
+    showCart(); // إعادة عرض السلة بعد الحذف لتحديث القائمة
+}
+
+function closeCart() {
+    document.getElementById('cartModal').style.display = 'none';
+}
+function checkout() {
+    if (cart.length === 0) {
+        alert("السلة فارغة، قم بإضافة منتجات أولاً!");
+        return;
+    }
+
+    // 1. تجهيز نص الرسالة
+    let message = "مرحباً، أريد طلب المنتجات التالية:\n\n";
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        message += `${index + 1}- ${item.name} (${item.price} جنيه)\n`;
+        total += parseInt(item.price);
+    });
+
+    message += `\nالإجمالي: ${total} جنيه`;
+    message += "\n\nفي انتظار تأكيد الطلب.";
+
+    // 2. تشفير الرسالة عشان رابط الواتساب (URL encoding)
+    const encodedMessage = encodeURIComponent(message);
+
+    // 3. رقم الواتساب الخاص بيك (غير الرقم ده لرقمك، لازم يبدأ بكود الدولة بدون +)
+    const phoneNumber = "201207686149"; 
+
+    // 4. فتح رابط الواتساب
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+}
+function filterProducts(category, element) {
+    // 1. تحديث المتغير العالمي
+    currentCategory = category;
+    
+    // 2. تحديث شكل الأزرار (تغيير لون الزر النشط)
+    document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+    
+    // 3. إعادة عرض المنتجات حسب الفلتر الجديد (باستخدام البيانات المجمعة مسبقاً)
+    renderProducts(products); 
+}
+        // هنخلي الدالة تستقبل الـ products كمتغير، ولو مبعتش حاجة هتستخدم المصفوفة القديمة
+function renderProducts(productsData = []) {
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = ''; // تفريغ المكان
+
+    // دالة مساعدة لتحويل النص لشكل موحد (حذف مسافات + توحيد الهمزات)
+    const normalize = (str) => {
+        if (!str) return "";
+        return str.toString().trim().replace(/[أإآ]/g, 'ا');
+    };
+
+    // منطق الفلترة المطور
+    const filteredProducts = (currentCategory === 'الكل') 
+        ? productsData 
+        : productsData.filter(p => normalize(p.category) === normalize(currentCategory));
+
+    // التحقق مما إذا كانت المصفوفة المفلترة فارغة
+    if (!filteredProducts || filteredProducts.length === 0) {
+        grid.innerHTML = '<div class="no-products" style="text-align:center; padding:20px; color:#888;">لا توجد منتجات في هذا التصنيف حالياً.</div>';
+        return;
+    }
+
+    // عرض المنتجات المفلترة
+    filteredProducts.forEach(p => {
+        grid.innerHTML += `
+            <div class="product-card">
+                <img src="${p.img || 'image_9d3345.jpg'}" alt="${p.name}" class="product-img" onerror="this.src='image_9d3345.jpg'">
+                <div class="product-info">
+                    <h3 class="product-title">${p.name || 'بدون اسم'}</h3>
+                    <p class="product-price">${p.price || '0'} جنيه</p>
+                    <button class="btn-order" onclick="addToCart('${p.name}', '${p.price}')">أضف للسلة</button>
+                </div>
+            </div>
+        `;
+    });
+}
         function renderAdminProductsList() {
             const list = document.getElementById('adminProductsList');
             list.innerHTML = '';
@@ -715,35 +1004,73 @@
                             <span class="admin-prod-name">${p.name}</span>
                             <span class="admin-prod-price">${p.price} جنيه</span>
                         </div>
-                        <button class="btn-delete" onclick="deleteProduct(${p.id})">
-                            <i class="fas fa-trash-alt"></i> حذف
-                        </button>
+                <button class="btn-delete" onclick="deleteProduct('${p.id}')">
+                        <i class="fas fa-trash-alt"></i> حذف
+                             </button>
                     </div>
                 `;
             });
         }
 
         function orderProduct(productName) {
-            const phoneNumber = "201038098988";
+            const phoneNumber = "20 12 0768 6149";
             const message = encodeURIComponent(`مرحباً متجر سوار، أريد طلب منتج: ${productName}`);
             window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
         }
 
         // تعديل الدالة لإغلاق اللوحة السحرية فور الخروج وطلب الباسورد مجدداً عند العودة
-        let clickCount = 0;
-        function triggerSecretStar() {
-            clickCount++;
-            if (clickCount === 5) {
-                clickCount = 0;
-                
-                // إعادة إظهار صندوق تسجيل الدخول وإخفاء لوحة التحكم وتصفير حقل الباسورد القديم لزيادة الأمان
-                document.getElementById('adminLoginBox').style.display = 'block';
-                document.getElementById('adminControlBox').style.display = 'none';
-                document.getElementById('adminPasswordInput').value = ''; 
-                
-                switchPage('adminPage', null);
-            }
-        }
+
+       // ضعه في أعلى الملف خالص
+let clickCount = 0; 
+
+// ابحث عن مكان الدالة القديمة واستبدلها بهذه:
+function triggerSecretStar() {
+    clickCount++;
+    console.log("عدد الضغطات: " + clickCount); 
+
+    if (clickCount === 5) {
+        // 1. التبديل لصفحة الأدمن
+        switchPage('adminPage', null);
+        
+        // 2. إظهار صندوق تسجيل الدخول
+        document.getElementById('adminLoginBox').style.display = 'block';
+        document.getElementById('adminControlBox').style.display = 'none';
+        
+        // 3. تصفير العداد عشان لو خرج ورجع ميعلقش
+        clickCount = 0; 
+        
+        // 4. فوكس على حقل الباسورد عشان يكتب على طول
+        document.getElementById('adminPasswordInput').focus();
+    }
+}
+        // المتغير الخاص بالهاش (اللي أنت استخرجته)
+const correctHash = "c83843b37da148cf35dc844776d8e13405ff94de9f3994de46b16ac0448c7af6";
+
+// دالة التحقق من كلمة السر وفتح لوحة التحكم
+async function checkAdmin() {
+    // 1. نجيب كلمة السر اللي المدير كتبها
+    let inputPassword = document.getElementById('adminPasswordInput').value;
+    
+    // 2. نشفرها باستخدام الـ Salt والـ Hash
+    const inputHash = await sha256(inputPassword);
+    
+    // 3. نقارن بالهاش اللي إحنا حافظينه
+    if (inputHash === correctHash) {
+        alert("تم الدخول بنجاح يا مدير!");
+        
+        // إخفاء صندوق الدخول
+        document.getElementById('adminLoginBox').style.display = 'none';
+        
+        // إظهار لوحة التحكم (استبدل adminControlBox بالـ ID بتاع لوحة التحكم عندك)
+        const controlBox = document.getElementById('adminControlBox');
+        if(controlBox) controlBox.style.display = 'block';
+        
+        switchPage('adminPage', null);
+    } else {
+        alert("كلمة سر خاطئة!");
+        document.getElementById('adminPasswordInput').value = ''; // تصفير الحقل
+    }
+}
     </script>
 </body>
 </html>
